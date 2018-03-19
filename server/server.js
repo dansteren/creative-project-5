@@ -5,7 +5,8 @@ const uuid = require('uuid/v4');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(express.static('public'));
+// TODO: Enable this on the server
+// app.use(express.static('dist'));
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
@@ -15,6 +16,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+// TODO: remove mock data on server.
 // const cards = {};
 const cards = require('./mockData');
 

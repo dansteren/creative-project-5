@@ -4,6 +4,7 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+// TODO: Remove baseURL on server
 var api = axios.create({
   baseURL: 'http://localhost:3005',
   timeout: 1000
