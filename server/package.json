@@ -1,0 +1,26 @@
+{
+  "name": "creative-project-server",
+  "version": "1.0.0",
+  "description": "Todo List with Vue and Node",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start-server": "forever start server.js",
+    "stop-server": "forever stop 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "forever": "^0.15.3",
+    "prettier": "^1.11.1"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
