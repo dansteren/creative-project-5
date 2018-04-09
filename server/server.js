@@ -6,7 +6,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static('../dist'));
 }
@@ -63,4 +62,4 @@ app.delete('/api/cards/:id', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(3005, () => console.log('Server listening on port 3005!'));
+app.listen(3000, () => console.log('Server listening on port 3000!'));
