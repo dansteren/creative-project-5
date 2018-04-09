@@ -5,8 +5,11 @@ const uuid = require('uuid/v4');
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// TODO: Enable this on the server
-app.use(express.static('../dist'));
+
+console.log(process.env.NODE_ENV);
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('../dist'));
+}
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
