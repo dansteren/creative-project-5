@@ -14,6 +14,8 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
+    "knex": "^0.14.5",
+    "mariasql": "^0.2.6",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
