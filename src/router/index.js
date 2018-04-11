@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import { Add, Dashboard, MarketingPage, Print } from '~/components';
+
+import store from '~/store';
+import { Add, Root, Print } from '~/components';
 
 Vue.use(Router);
 
@@ -9,22 +11,24 @@ export default new Router({
     {
       path: '/add',
       name: 'Add',
-      component: Add
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard
+      component: Add,
+      beforeEnter: (tp, from, next) => {
+        if (store.state.loggedIn) {
+          next();
+        } else {
+          next('/');
+        }
+      },
     },
     {
       path: '/',
-      name: 'MarketingPage',
-      component: MarketingPage
+      name: 'Root',
+      component: Root,
     },
     {
       path: '/print',
       name: 'Print',
-      component: Print
-    }
-  ]
+      component: Print,
+    },
+  ],
 });

@@ -26,9 +26,9 @@ export default {
   },
   computed: {
     cards() {
-      return this.$store.getters.cards;
-    }
-  }
+      return this.$store.state.cards;
+    },
+  },
 };
 </script>
 
