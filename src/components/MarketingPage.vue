@@ -55,8 +55,7 @@ export default {
 
 <style scoped>
 .marketing-page {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('/static/cards.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/static/desk.jpg');
   background-repeat: none;
   background-position: center;
   background-size: cover;
