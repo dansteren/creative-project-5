@@ -29,5 +29,69 @@ app.use(function(req, res, next) {
 });
 
 
+//ENDPOINTS
+//CARD****************************
+//Add card
+app.post('/api/cards', (req, res) =>{
+  //in the body, donor, gift message. return whole card with card_id
+
+});
+
+//Delete card
+app.delete('/api/cards/:id', (req,res) => {
+  //get id from parameters. return 200
+});
+
+//Get all cards
+app.get('/api/cards', (req, res) => {
+
+});
+
+//Edit card
+app.put('/api/cards/:id', (req,res) => {
+  //get new card from the body. return the whole card
+});
+
+
+//AUTHENTICATION******************
+//Log in
+app.post('/api/login', (req, res) => {
+  //Make sure all the information comes in the request
+  if (!req.body.username || !req.body.password)
+    return res.status(400).send();
+  knex('users').where('username',req.body.username).first().then(user => {
+    if (user === undefined) {
+      res.status(403).send("Invalid credentials");
+      throw new Error('abort');
+    }
+    return [bcrypt.compare(req.body.password, user.hash),user];
+  }).spread((result,user) => {
+    if (result)
+      res.status(200).json({user:{username:user.username,name:user.name,id:user.id}});
+    else
+      res.status(403).send("Invalid credentials");
+    return;
+  }).catch(error => {
+    if (error.message !== 'abort') {
+      console.log(error);
+      res.status(500).json({ error });
+    }
+  });
+});
+
+//Log out
+
+
+
+//USER MANAGEMENT*****************
+//Add user
+app.post('/api/users', (req, res) => {
+  //user information comes in the body
+  //return the user back, and user_id.
+});
+
+
+
+
 
 app.listen(3000, () => console.log('Server listening on port 3000!'));
