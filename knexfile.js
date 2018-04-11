@@ -7,8 +7,8 @@ module.exports = {
     connection: {
       host: '127.0.0.1',
       user: 'root',
-      password: process.env.DB_PASSWORD || '',
-      db: 'tickets',
+      password: '022292',
+      db: 'thankyous',
       charset: 'utf8'
     }
   },
@@ -32,11 +32,9 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      host: '127.0.0.1',
-      user: 'root',
-      password: process.env.DB_PASSWORD || '',
-      db: 'tickets',
-      charset: 'utf8'
+      database: 'my_db',
+      user:     'username',
+      password: 'password'
     },
     pool: {
       min: 2,
