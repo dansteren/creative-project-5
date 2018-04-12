@@ -2,7 +2,14 @@
   <div class="dashboard">
     <div class="card-list-container">
       <h1>Card List</h1>
-      <card v-for="card in cards" :key="card.id" :donor="card.donor" :items="card.items" :selected="false"></card>
+      <card
+        v-for="card in cards"
+        :key="card.id"
+        :donor="card.donor"
+        :gift="card.gift"
+        :selected="selected(card.id)"
+        @change="cardSelected(card.id, $event)"
+      ></card>
     </div>
     <div class="todo-list-container">
       Quick Links
@@ -13,6 +20,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { Card } from '~/components';
 
 export default {
@@ -25,8 +33,14 @@ export default {
     return {};
   },
   computed: {
-    cards() {
-      return this.$store.state.cards;
+    ...mapState(['cards']),
+  },
+  methods: {
+    selected(cardId) {
+      return this.$store.getters.selected(cardId);
+    },
+    cardSelected(id, event) {
+      this.$store.commit(event.srcElement.checked ? 'addSelection' : 'removeSelection', id);
     },
   },
 };

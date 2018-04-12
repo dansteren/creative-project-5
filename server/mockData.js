@@ -2,37 +2,37 @@ module.exports = {
   'asdf-0001': {
     id: 'asdf-0001',
     donor: 'Smith Family',
-    items: ['waffle iron'],
-    ps: ''
+    gift: 'waffle iron',
+    message: ''
   },
   'asdf-0002': {
     id: 'asdf-0002',
     donor: 'Don and Patty',
-    items: ['sofa'],
-    ps: ''
+    gift: 'sofa',
+    message: ''
   },
   'asdf-0003': {
     id: 'asdf-0003',
     donor: 'Teresa',
-    items: ['mixing bowls', 'tupperware'],
-    ps: ''
+    gift: 'mixing bowls',
+    message: ''
   },
   'asdf-0004': {
     id: 'asdf-0004',
     donor: 'Grandpa Joe',
-    items: ['nose trimmer'],
-    ps: ''
+    gift: 'nose trimmer',
+    message: ''
   },
   'asdf-0005': {
     id: 'asdf-0005',
     donor: 'Brother Gunther',
-    items: ['scriptures', 'hymn book'],
-    ps: ''
+    gift: 'scriptures',
+    message: ''
   },
   'asdf-0006': {
     id: 'asdf-0006',
     donor: 'Robert Parr',
-    items: ['suit', 'gloves'],
-    ps: ''
+    gift: 'suit',
+    message: ''
   }
-}
+};

@@ -10,7 +10,9 @@
         </div>
       </div>
       <form>
-        <div class="title">Create an account</div>
+        <div class="title">Sign Up / Sign In</div>
+        <label>Name</label>
+        <input type="text" v-model="name" />
         <label>Email</label>
         <input type="text" v-model="email" />
         <label>Password</label>
@@ -31,6 +33,7 @@ export default {
   name: 'MarketingPage',
   data() {
     return {
+      name: '',
       email: '',
       password: '',
     };
@@ -85,7 +88,6 @@ h1 {
   flex-direction: column;
   align-items: flex-start;
   color: #eceff1;
-  text-align: left;
   margin-right: 85px;
 }
 form {

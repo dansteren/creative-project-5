@@ -1,8 +1,8 @@
 <template>
   <div class="card">
-    <input type="checkbox" v-model="selected">
+    <input type="checkbox" :checked="selected" @change="emit">
     <div class="donor-box">{{this.donor}}</div>
-    <div class="item-box">{{this.items.join()}}</div>
+    <div class="item-box">{{this.gift}}</div>
   </div>
 </template>
 
@@ -12,20 +12,25 @@ export default {
   props: {
     donor: {
       type: String,
-      required: true
+      required: true,
     },
-    items: {
-      type: Array,
-      required: true
+    gift: {
+      type: String,
+      required: true,
     },
     selected: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {};
-  }
+  },
+  methods: {
+    emit(event) {
+      this.$emit('change', event);
+    },
+  },
 };
 </script>
 
