@@ -57,7 +57,7 @@ app.put('/api/cards/:id', (req, res) => {
 //Log in
 app.post('/api/login', (req, res) => {
   console.log('login end point');
-  //Make sure all the information comes in the request
+  //Make sure all the information comes in the request.
   if (!req.body.username || !req.body.password) return res.status(400).send();
   knex('users')
     .where('username', req.body.username)
