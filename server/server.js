@@ -78,6 +78,10 @@ app.delete('/api/cards/:id', (req, res) => {
 //Get all cards
 app.get('/api/cards', (req, res) => {
   console.log('get all cards');
+
+  knex('gifts').select().then(cards => {
+    res.status(200).json({cards});
+  });
 });
 
 //Edit card
