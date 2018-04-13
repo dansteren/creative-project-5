@@ -31,9 +31,42 @@ app.use(function(req, res, next) {
 //ENDPOINTS
 //CARD****************************
 //Add card
+//in the body, donor, gift message. return whole card with card_id
 app.post('/api/cards', (req, res) => {
   console.log('add card');
-  //in the body, donor, gift message. return whole card with card_id
+
+  //Make sure all of the information comes in the body
+  if (!req.body.item || !req.body.user_id || !req.body.donor)
+    return res.status(400).send();
+
+  let message;
+  if(!req.body.psmessage) message = "";
+  else message = req.body.psmessage;
+
+  console.log(req.body.item);
+  console.log(req.body.user_id);
+  console.log(req.body.donor);
+  console.log(message);
+
+
+  //query to add card
+  knex('gifts').insert({
+    item: req.body.item,
+    user_id: req.body.user_id,
+    donor: req.body.donor,
+    psmessage: message,
+  }).then(ids => {
+    return knex('gifts')
+    .where('id', ids[0])
+    .first()
+    .select();
+  }).then(card => {
+    res.status(200).json({card: card});
+    return;
+  }).catch(error => {
+    console.log("could not add a new card");
+    res.status(500).json({error});
+  });
 });
 
 //Delete card
