@@ -91,13 +91,10 @@ app.post('/api/login', (req, res) => {
 
 //USER MANAGEMENT*****************
 //Add user
+//user information comes in the body
+  //return the user back, and user_id.
 app.post('/api/users', (req, res) => {
   console.log('add user');
-  //user information comes in the body
-  //return the user back, and user_id.
-  console.log(req.body.username);
-  console.log(req.body.password);
-  console.log(req.body.name);
   if (!req.body.username || !req.body.password || !req.body.name)
     return res.status(400).send();
   knex('users')
