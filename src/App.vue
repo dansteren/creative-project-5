@@ -16,6 +16,10 @@ body {
 }
 :root {
   --primary-color: #607d8b;
+  --border-light: 1px solid rgba(27, 31, 35, 0.2);
+  --border-dark: 1px solid rgba(0, 0, 0, 0.3);
+  --round-small: 3px;
+  --padding-default: 16px;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
