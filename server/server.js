@@ -73,9 +73,36 @@ app.post('/api/cards', (req, res) => {
 });
 
 //Delete card
+//get id from parameters. return 200
 app.delete('/api/cards/:id', (req, res) => {
   console.log('delete card');
-  //get id from parameters. return 200
+
+  knex('gifts')
+    .where('id', req.params.id)
+    .first()
+    .select()
+    .then(result => {
+      if (result === undefined)
+      res.status(403).send('id is incorrect. no matching row');
+      throw new Error('abort');
+    }).catch(error => {
+      return;
+    });
+
+  knex('gifts')
+    .where('id', req.params.id)
+    .del()
+    .then(result => {
+      res.status(200).send();
+      return;
+    })
+    .catch(error => {
+      console.log('could not delete card ');
+      if (error.message !== 'abort') {
+        console.log(error);
+        res.status(500).json({ error });
+      }
+    });
 });
 
 //Get all cards
@@ -115,7 +142,7 @@ app.put('/api/cards/:id', (req, res) => {
       item: req.body.item,
       user_id: req.body.user_id,
       donor: req.body.donor,
-      psmessage: message,
+      psmessage: message
     })
     .then(ids => {
       return knex('gifts')
@@ -129,9 +156,9 @@ app.put('/api/cards/:id', (req, res) => {
     })
     .catch(error => {
       console.log("couldn't edit a card");
-      if(error.message !== 'abort') {
+      if (error.message !== 'abort') {
         console.log(error);
-        res.status(500).json({error});
+        res.status(500).json({ error });
       }
     });
 });
