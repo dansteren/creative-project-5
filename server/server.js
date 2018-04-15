@@ -19,6 +19,29 @@ const knex = require('knex')(config);
 let bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+// jwt setup
+const jwt = require('jsonwebtoken');
+let jwtSecret = process.env.jwtSecret;
+if (jwtSecret === undefined) {
+  console.log(
+    'You need to define a jwtSecret environment variable to continue.'
+  );
+  knex.destroy();
+  process.exit();
+}
+
+const verifyToken = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(403).send({ error: 'No token provided.' });
+  jwt.verify(token, jwtSecret, function(err, decoded) {
+    if (err)
+      return res.status(500).send({ error: 'Failed to authenticate token.' });
+    // if everything good, save to request for use in other routes
+    req.userID = decoded.id;
+    next();
+  });
+};
+
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
@@ -32,7 +55,7 @@ app.use(function(req, res, next) {
 //CARD****************************
 //Add card
 //in the body, donor, gift message. return whole card with card_id
-app.post('/api/cards', (req, res) => {
+app.post('/api/cards', verifyToken, (req, res) => {
   console.log('add card');
 
   //Make sure all of the information comes in the body
@@ -42,11 +65,6 @@ app.post('/api/cards', (req, res) => {
   let message;
   if (!req.body.psmessage) message = '';
   else message = req.body.psmessage;
-
-  console.log(req.body.item);
-  console.log(req.body.user_id);
-  console.log(req.body.donor);
-  console.log(message);
 
   //query to add card
   knex('gifts')
@@ -74,7 +92,7 @@ app.post('/api/cards', (req, res) => {
 
 //Delete card
 //get id from parameters. return 200
-app.delete('/api/cards/:id', (req, res) => {
+app.delete('/api/cards/:id', verifyToken, (req, res) => {
   console.log('delete card');
 
   knex('gifts')
@@ -83,9 +101,10 @@ app.delete('/api/cards/:id', (req, res) => {
     .select()
     .then(result => {
       if (result === undefined)
-      res.status(403).send('id is incorrect. no matching row');
+        res.status(403).send('id is incorrect. no matching row');
       throw new Error('abort');
-    }).catch(error => {
+    })
+    .catch(error => {
       return;
     });
 
@@ -125,7 +144,7 @@ app.get('/api/cards', (req, res) => {
 
 //Edit card
 //get new card from the body. return the whole card
-app.put('/api/cards/:id', (req, res) => {
+app.put('/api/cards/:id', verifyToken, (req, res) => {
   console.log('edit card');
 
   //Make sure all of the information comes in the body
@@ -180,11 +199,17 @@ app.post('/api/login', (req, res) => {
       return [bcrypt.compare(req.body.password, user.hash), user];
     })
     .spread((result, user) => {
-      if (result)
-        res.status(200).json({
-          user: { username: user.username, name: user.name, id: user.id }
+      if (result) {
+        let token = jwt.sign({ id: user.id }, jwtSecret, {
+          expiresIn: 86400 // expires in 24 hours
         });
-      else res.status(403).send('Invalid credentials');
+        res.status(200).json({
+          user: { username: user.username, name: user.name, id: user.id },
+          token: token
+        });
+      } else {
+        res.status(403).send('Invalid credentials');
+      }
       return;
     })
     .catch(error => {
@@ -229,7 +254,10 @@ app.post('/api/users', (req, res) => {
         .select('username', 'name', 'id');
     })
     .then(user => {
-      res.status(200).json({ user: user });
+      let token = jwt.sign({ id: user.id }, jwtSecret, {
+        expiresIn: 86400 // expires in 24 hours
+      });
+      res.status(200).json({ user: user, token: token });
       return;
     })
     .catch(error => {
