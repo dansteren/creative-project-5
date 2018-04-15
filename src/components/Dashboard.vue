@@ -1,24 +1,29 @@
 <template>
   <div class="dashboard">
     <div class="main-area">
-      <div class="message-header">
-        Card message
-      </div>
-      <div class="message-container">
-        <div v-if="editing">
-          <div>
-            Type "{donor}", "{gift}", and "{message}" to represent
-            the values that will change on each card.
+      <div class="box message-box">
+        <div class="box-header padded">Card message</div>
+        <div class="box-body padded">
+          <div v-if="editing">
+            <div>
+              Type "{donor}", "{gift}", and "{message}" to represent
+              the values that will change on each card.
+            </div>
+            <textarea class="message" v-model="message"></textarea>
           </div>
-          <textarea class="message" v-model="message"></textarea>
+          <div class="formatted-message" v-else v-html="formattedMessage"></div>
+          <button class="edit-button" @click="toggleEditing">{{editing ? 'Done' : 'Edit'}}</button>
         </div>
-        <div class="formatted-message" v-else v-html="formattedMessage"></div>
-        <button class="edit-button" @click="toggleEditing">Edit</button>
       </div>
-      <div class="card-list-container">
-        <h1>Gift List</h1>
-        <div v-if="listEmpty">
-          No gifts recorded. Click "Add Card" to get started
+      <div class="box gifts-box">
+        <div class="box-header gifts-header">
+          Gifts
+          <div>
+            <icon-button @click="goToAdd"><add-icon/></icon-button>
+          </div>
+        </div>
+        <div class="box-body padded" v-if="listEmpty">
+          No gifts recorded. Click the plus icon to get started.
         </div>
         <div v-else>
           <card
@@ -32,17 +37,24 @@
         </div>
       </div>
     </div>
-    <div class="todo-list-container">
-      Quick Links
-      <router-link to="/add">Add Card</router-link>
-      <router-link to="/print">Print</router-link>
+    <div class="box instructions-box">
+      <div class="box-header">Instructions</div>
+      <div class="box-body padded">
+        <ol>
+          <li>Customize your message.<br>(This will print on all your cards.)</li>
+          <li>Record your gifts.</li>
+          <li>Click the print icon when ready!</li>
+        </ol>
+      </div>
     </div>
+    <fab @click="printCards"><print-icon/></fab>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { Card } from '~/components';
+import { Card, Fab } from '~/components';
+import { AddIcon, IconButton, PrintIcon } from '~/components/icons';
 
 // See https://apracticalwedding.com/wedding-thank-you-card-wording-template/
 const message =
@@ -54,9 +66,13 @@ const message =
   'Joshua & Samantha\n\n' +
   'P.S. {message}\n';
 
+function highlight(text) {
+  return `<span style="color: var(--primary-color)">${text}</span>`;
+}
+
 export default {
   name: 'Dashboard',
-  components: { Card },
+  components: { Card, AddIcon, IconButton, PrintIcon, Fab },
   created() {
     this.$store.dispatch('getCards');
   },
@@ -72,9 +88,9 @@ export default {
     },
     formattedMessage() {
       return this.message
-        .replace(/{donor}/g, '<span style="color:red">donor</span>')
-        .replace(/{gift}/g, '<span style="color:red">gift</span>')
-        .replace(/{message}/g, '<span style="color:red">message</span>')
+        .replace(/{donor}/g, highlight('donor'))
+        .replace(/{gift}/g, highlight('gift'))
+        .replace(/{message}/g, highlight('message'))
         .replace(/\n/g, '<br>');
     },
     ...mapState(['cards']),
@@ -90,6 +106,12 @@ export default {
       console.log('editingi');
       this.editing = !this.editing;
     },
+    goToAdd(e) {
+      this.$router.push('/add');
+    },
+    printCards() {
+      alert(`This function isn't ready quite yet. Try back tomorrow.`);
+    },
   },
 };
 </script>
@@ -101,20 +123,25 @@ export default {
   display: flex;
   max-width: 992px;
 }
-.message-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px solid red;
-  box-sizing: border-box;
-  padding: var(--padding-default);
-  margin-bottom: 16px;
+.box {
   border: var(--border-light);
   border-radius: var(--round-small);
 }
-.message-header {
-  margin-bottom: 16px;
+.box-header {
   font-weight: 600;
+  background-color: #f5f5f5;
+  padding: var(--padding-default);
+  border-bottom: var(--border-light);
+}
+.box-body {
+  display: flex;
+  flex-direction: column;
+}
+.padded {
+  padding: var(--padding-default);
+}
+.message-box {
+  margin-bottom: 16px;
 }
 .message {
   width: calc(100% - 6px);
@@ -129,6 +156,12 @@ export default {
 .formatted-message {
   margin-bottom: 16px;
   height: 232px;
+}
+.gifts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
 }
 .edit-button {
   align-self: flex-end;
@@ -146,21 +179,12 @@ export default {
   flex: 2;
   margin-right: 8px;
 }
-.card-list-container {
-  border: 1px solid black;
-  flex: 2;
-  margin-right: 8px;
-  width: 100%;
-  border: var(--border-light);
-  border-radius: var(--round-small);
-}
-.todo-list-container {
+.instructions-box {
   margin-left: 8px;
-  border: var(--border-light);
-  border-radius: var(--round-small);
-  padding: var(--padding-default);
-  display: flex;
-  flex-direction: column;
   flex: 1;
+  height: fit-content;
+}
+.icon {
+  color: rgba(0, 0, 0, 0.54);
 }
 </style>

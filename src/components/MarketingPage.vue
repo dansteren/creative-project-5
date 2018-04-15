@@ -131,7 +131,7 @@ form input {
 input[type='button'] {
   width: 125px;
   padding: 12px 16px;
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
   font-size: 14px;
@@ -154,7 +154,7 @@ input[type='button']:active {
   box-shadow: none;
 }
 input[primary] {
-  background-color: #42b983;
+  background-color: var(--primary-color);
 }
 input[primary]:hover {
   background-color: #3caa79;
