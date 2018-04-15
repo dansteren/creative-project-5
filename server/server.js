@@ -40,7 +40,7 @@ app.post('/api/cards', (req, res) => {
     return res.status(400).send();
 
   let message;
-  if(!req.body.psmessage) message = "";
+  if (!req.body.psmessage) message = '';
   else message = req.body.psmessage;
 
   console.log(req.body.item);
@@ -48,25 +48,28 @@ app.post('/api/cards', (req, res) => {
   console.log(req.body.donor);
   console.log(message);
 
-
   //query to add card
-  knex('gifts').insert({
-    item: req.body.item,
-    user_id: req.body.user_id,
-    donor: req.body.donor,
-    psmessage: message,
-  }).then(ids => {
-    return knex('gifts')
-    .where('id', ids[0])
-    .first()
-    .select();
-  }).then(card => {
-    res.status(200).json({card: card});
-    return;
-  }).catch(error => {
-    console.log("could not add a new card");
-    res.status(500).json({error});
-  });
+  knex('gifts')
+    .insert({
+      item: req.body.item,
+      user_id: req.body.user_id,
+      donor: req.body.donor,
+      psmessage: message
+    })
+    .then(ids => {
+      return knex('gifts')
+        .where('id', ids[0])
+        .first()
+        .select();
+    })
+    .then(card => {
+      res.status(200).json({ card: card });
+      return;
+    })
+    .catch(error => {
+      console.log('could not add a new card');
+      res.status(500).json({ error });
+    });
 });
 
 //Delete card
@@ -79,15 +82,58 @@ app.delete('/api/cards/:id', (req, res) => {
 app.get('/api/cards', (req, res) => {
   console.log('get all cards');
 
-  knex('gifts').select().then(cards => {
-    res.status(200).json({cards});
-  });
+  knex('gifts')
+    .select()
+    .then(cards => {
+      res.status(200).json({ cards });
+    })
+    .catch(error => {
+      console.log('Couldnt get all cards');
+      if (error.message !== 'abort') {
+        console.log(error);
+        res.status(500).json({ error });
+      }
+    });
 });
 
 //Edit card
+//get new card from the body. return the whole card
 app.put('/api/cards/:id', (req, res) => {
   console.log('edit card');
-  //get new card from the body. return the whole card
+
+  //Make sure all of the information comes in the body
+  if (!req.body.item || !req.body.user_id || !req.body.donor)
+    return res.status(400).send();
+
+  let message;
+  if (!req.body.psmessage) message = '';
+  else message = req.body.psmessage;
+
+  knex('gifts')
+    .where('id', req.params.id)
+    .update({
+      item: req.body.item,
+      user_id: req.body.user_id,
+      donor: req.body.donor,
+      psmessage: message,
+    })
+    .then(ids => {
+      return knex('gifts')
+        .where('id', req.params.id)
+        .first()
+        .select();
+    })
+    .then(card => {
+      res.status(200).json({ card });
+      return;
+    })
+    .catch(error => {
+      console.log("couldn't edit a card");
+      if(error.message !== 'abort') {
+        console.log(error);
+        res.status(500).json({error});
+      }
+    });
 });
 
 //AUTHENTICATION******************
@@ -108,11 +154,9 @@ app.post('/api/login', (req, res) => {
     })
     .spread((result, user) => {
       if (result)
-        res
-          .status(200)
-          .json({
-            user: { username: user.username, name: user.name, id: user.id }
-          });
+        res.status(200).json({
+          user: { username: user.username, name: user.name, id: user.id }
+        });
       else res.status(403).send('Invalid credentials');
       return;
     })
@@ -129,7 +173,7 @@ app.post('/api/login', (req, res) => {
 //USER MANAGEMENT*****************
 //Add user
 //user information comes in the body
-  //return the user back, and user_id.
+//return the user back, and user_id.
 app.post('/api/users', (req, res) => {
   console.log('add user');
   if (!req.body.username || !req.body.password || !req.body.name)
@@ -148,7 +192,7 @@ app.post('/api/users', (req, res) => {
       return knex('users').insert({
         username: req.body.username,
         hash: hash,
-        name: req.body.name,
+        name: req.body.name
       });
     })
     .then(ids => {
