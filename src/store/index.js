@@ -107,7 +107,7 @@ export default new Vuex.Store({
     async getCards({ commit }) {
       try {
         const response = await axios.get(`/api/cards`);
-        commit('setCards', response.data);
+        commit('setCards', response.data.cards);
       } catch (error) {
         console.log('getCards failed:', error);
       }

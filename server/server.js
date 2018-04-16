@@ -268,6 +268,20 @@ app.post('/api/users', (req, res) => {
     });
 });
 
+// Get my account
+app.get('/api/me', verifyToken, (req, res) => {
+  knex('users')
+    .where('id', req.userID)
+    .first()
+    .select('username', 'name', 'id')
+    .then(user => {
+      res.status(200).json({ user: user });
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+});
+
 //My database managment
 
 app.listen(3000, () => console.log('Server listening on port 3000!'));

@@ -1,13 +1,12 @@
 // Update with your config settings.
 
 module.exports = {
-
   development: {
     client: 'mariasql',
     connection: {
       host: '127.0.0.1',
       user: 'root',
-      password: '022292',
+      password: process.env.DB_PASSWORD || '',
       db: 'thankyous',
       charset: 'utf8'
     }
@@ -17,7 +16,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     pool: {
@@ -33,7 +32,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     pool: {
@@ -44,5 +43,4 @@ module.exports = {
       tableName: 'knex_migrations'
     }
   }
-
 };

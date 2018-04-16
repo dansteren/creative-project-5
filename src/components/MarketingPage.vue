@@ -13,8 +13,8 @@
         <div class="title">Sign Up / Sign In</div>
         <label>Name</label>
         <input type="text" v-model="name" />
-        <label>Email</label>
-        <input type="text" v-model="email" />
+        <label>Username</label>
+        <input type="text" v-model="username" />
         <label>Password</label>
         <input type="password" v-model="password" />
         <div class="error">{{authError}}</div>
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       name: '',
-      email: '',
+      username: '',
       password: '',
     };
   },
@@ -42,13 +42,14 @@ export default {
   methods: {
     login() {
       this.$store.dispatch('login', {
-        email: this.email,
+        username: this.username,
         password: this.password,
       });
     },
     register() {
       this.$store.dispatch('register', {
-        email: this.email,
+        name: this.name,
+        username: this.username,
         password: this.password,
       });
     },
