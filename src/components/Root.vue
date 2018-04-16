@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import { MarketingPage, Dashboard } from '~/components';
 export default {
   name: 'Root',
   components: { MarketingPage, Dashboard },
-  computed: mapState(['loggedIn']),
+  computed: mapGetters(['loggedIn']),
 };
 </script>
 

@@ -135,7 +135,7 @@ export default {
       alert(`This function isn't ready quite yet. Try back tomorrow.`);
     },
     logout() {
-      alert('logging out');
+      this.$store.dispatch('logout');
     },
   },
 };

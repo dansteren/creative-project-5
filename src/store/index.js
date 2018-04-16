@@ -4,10 +4,14 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+const getAuthHeader = () => {
+  return { headers: { Authorization: localStorage.getItem('token') } };
+};
+
 export default new Vuex.Store({
   state: {
     user: {},
-    loggedIn: true,
+    token: '',
     authError: '',
     cards: [],
     selectedCards: [],
@@ -16,13 +20,21 @@ export default new Vuex.Store({
     selected: state => cardId => {
       return state.selectedCards.includes(cardId);
     },
+    loggedIn: state => {
+      return state.token === '' ? false : true;
+    },
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
     },
-    setLoggedIn(state, status) {
-      state.loggedIn = status;
+    setToken(state, token) {
+      state.token = token;
+      if (token === '') {
+        localStorage.removeItem('token');
+      } else {
+        localStorage.setItem('token', token);
+      }
     },
     setAuthError(state, message) {
       state.authError = message;
@@ -38,14 +50,28 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async initialize(context) {
+      let token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.get('/api/me', getAuthHeader());
+          context.commit('setToken', token);
+          context.commit('setUser', response.data.user);
+        } catch (error) {
+          localStorage.removeItem('token');
+          context.commit('setUser', {});
+          context.commit('setToken', '');
+        }
+      }
+    },
     async register({ commit }, user) {
       try {
         const response = await axios.post('/api/users', user);
         commit('setUser', response.data.user);
-        commit('setLoggedIn', true);
+        commit('setToken', response.data.token);
         commit('setAuthError', '');
       } catch (error) {
-        commit('setLoggedIn', false);
+        commit('setToken', '');
         if (error.response) {
           if (error.response.status === 403) {
             return commit('setAuthError', 'That email address already has an account.');
@@ -60,7 +86,7 @@ export default new Vuex.Store({
       try {
         const response = await axios.post('/api/login', user);
         commit('setUser', response.data.user);
-        commit('setLoggedIn', true);
+        commit('setToken', response.data.token);
         commit('setAuthError', '');
       } catch (error) {
         commit('setAuthError', '');
@@ -74,9 +100,9 @@ export default new Vuex.Store({
         commit('setAuthError', 'Sorry, your request failed. We will look into it.');
       }
     },
-    logout({ commit }, user) {
+    logout({ commit }) {
       commit('setUser', {});
-      commit('setLoggedIn', false);
+      commit('setToken', '');
     },
     async getCards({ commit }) {
       try {
