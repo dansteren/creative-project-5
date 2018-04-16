@@ -1,12 +1,6 @@
 <template>
-  <div>
-    <div v-if="loggedIn">
-      <dashboard/>
-    </div>
-    <div v-else>
-      <marketing-page/>
-    </div>
-  </div>
+  <dashboard v-if="loggedIn"/>
+  <marketing-page v-else />
 </template>
 
 <script>

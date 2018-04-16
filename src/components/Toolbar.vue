@@ -40,7 +40,7 @@ export default {
   padding: 16px;
   padding-left: 24px;
   box-sizing: border-box;
-  box-shadow: 0px 0px 5px #9e9e9e;
+  box-shadow: 0px 0px 10px #9e9e9e;
   color: #ffffff;
   user-select: none;
 }
