@@ -182,6 +182,44 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
     });
 });
 
+//Edit default message
+app.put('/api/message', verifyToken, (req, res) => {
+  console.log('edit default message');
+
+  knex('users')
+  .where('id', req.userID)
+  .update({
+    defaultmessage: req.body.defaultmessage
+  }).then(ids => {
+    return knex('users')
+    .where('id', req.userID)
+    .first()
+    .select('defaultmessage');
+  }).then(message => {
+    res.status(200).send(message);
+    return;
+  }).catch(error => {
+    console.log("Could not edit default message");
+    res.status(500).json({error});
+  });
+});
+
+//Get default message for user id
+app.get('/api/message', verifyToken, (req, res) => {
+  console.log('get default message for user');
+
+
+  knex('users')
+  .select('defaultmessage')
+  .where('id', req.userID)
+  .then(message => {
+    res.status(200).json(message);
+    return;
+  }).catch(error => {
+    console.log("could not get default message ");
+  });
+});
+
 //AUTHENTICATION******************
 //Log in
 app.post('/api/login', (req, res) => {
