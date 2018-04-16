@@ -1,12 +1,6 @@
 <template>
   <div class="dashboard">
-    <div class="toolbar">
-      <div class="toolbar-main">
-        <thanky-icon/>
-        <div class="toolbar-title">Thanky</div>
-      </div>
-      <flat-button label="logout" @click="logout"/>
-    </div>
+    <toolbar/>
     <div class="page">
       <div class="main-area">
         <div class="box message-box">
@@ -65,7 +59,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { Card, Fab, FlatButton } from '~/components';
+import { Card, Fab, Toolbar } from '~/components';
 import { AddIcon, EditIcon, IconButton, PrintIcon, DoneIcon, ThankyIcon } from '~/components/icons';
 
 // See https://apracticalwedding.com/wedding-thank-you-card-wording-template/
@@ -92,8 +86,7 @@ export default {
     Fab,
     EditIcon,
     DoneIcon,
-    FlatButton,
-    ThankyIcon,
+    Toolbar,
   },
   created() {
     this.$store.dispatch('getCards');
@@ -125,17 +118,13 @@ export default {
       this.$store.commit(event.srcElement.checked ? 'addSelection' : 'removeSelection', id);
     },
     toggleEditing() {
-      console.log('editingi');
       this.editing = !this.editing;
     },
-    goToAdd(e) {
+    goToAdd() {
       this.$router.push('/add');
     },
     printCards() {
       alert(`This function isn't ready quite yet. Try back tomorrow.`);
-    },
-    logout() {
-      this.$store.dispatch('logout');
     },
   },
 };
@@ -143,28 +132,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.toolbar {
-  display: flex;
-  background-color: var(--primary-color);
-  justify-content: space-between;
-  align-items: center;
-  height: 64px;
-  padding: 16px;
-  padding-left: 24px;
-  box-sizing: border-box;
-  box-shadow: 0px 0px 5px #9e9e9e;
-  color: #ffffff;
-  user-select: none;
-}
-.toolbar-main {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-}
-.toolbar-title {
-  padding-left: 24px;
-  font-size: 18px;
-}
 .page {
   margin: 16px auto;
   display: flex;

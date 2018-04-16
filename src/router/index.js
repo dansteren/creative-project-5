@@ -13,7 +13,7 @@ export default new Router({
       name: 'Add',
       component: Add,
       beforeEnter: (to, from, next) => {
-        if (store.state.loggedIn) {
+        if (store.getters.loggedIn) {
           next();
         } else {
           next('/');

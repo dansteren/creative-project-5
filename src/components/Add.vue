@@ -1,22 +1,30 @@
 <template>
-  <div class="page">
-    <form>
-      <h1>Record a Gift</h1>
-      <input tabIndex='2' v-model="donor" placeholder="Donor" ref='donor'/>
-      <input tabIndex='3' v-model="gift" placeholder="Gift(s)"/>
-      <textarea tabIndex='4' v-model="message" placeholder="Add an additional message (optional)"/>
-      <div class="error">{{error}}</div>
-      <div class="buttons">
-        <button tabIndex='1' class="back-button" @click.prevent="goToDashboard">Done</button>
-        <button tabIndex='5' class="submit-button" @click.prevent="addCard">Record Gift</button>
-      </div>
-    </form>
+  <div class="add-component">
+    <toolbar/>
+    <div class="page">
+      <form>
+        <h1>Record a Gift</h1>
+        <input tabIndex='2' v-model="donor" placeholder="Donor" ref='donor'/>
+        <input tabIndex='3' v-model="gift" placeholder="Gift(s)"/>
+        <textarea tabIndex='4' v-model="message" placeholder="Add an additional message (optional)"/>
+        <div class="error">{{error}}</div>
+        <div class="buttons">
+          <button tabIndex='1' class="back-button" @click.prevent="goToDashboard">Done</button>
+          <button tabIndex='5' class="submit-button" @click.prevent="addCard">Record Gift</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+import { Toolbar } from '~/components';
+
 export default {
   name: 'Add',
+  components: {
+    Toolbar,
+  },
   data() {
     return {
       donor: '',
@@ -57,12 +65,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.page {
+.add-component {
   height: 100vh;
+}
+.page {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 16px;
 }
 form {
   display: flex;
