@@ -1,60 +1,72 @@
 <template>
   <div class="dashboard">
-    <div class="main-area">
-      <div class="box message-box">
-        <div class="box-header padded">Card message</div>
-        <div class="box-body padded">
-          <div v-if="editing">
-            <div>
-              Type "{donor}", "{gift}", and "{message}" to represent
-              the values that will change on each card.
-            </div>
-            <textarea class="message" v-model="message"></textarea>
-          </div>
-          <div class="formatted-message" v-else v-html="formattedMessage"></div>
-          <button class="edit-button" @click="toggleEditing">{{editing ? 'Done' : 'Edit'}}</button>
-        </div>
+    <div class="toolbar">
+      <div class="toolbar-main">
+        <thanky-icon/>
+        <div class="toolbar-title">Thanky</div>
       </div>
-      <div class="box gifts-box">
-        <div class="box-header gifts-header">
-          Gifts
-          <div>
+      <flat-button label="logout" @click="logout"/>
+    </div>
+    <div class="page">
+      <div class="main-area">
+        <div class="box message-box">
+          <div class="box-header">
+            Message
+            <icon-button @click="toggleEditing">
+              <done-icon v-if="editing"/>
+              <edit-icon v-else/>
+            </icon-button>
+          </div>
+          <div class="box-body padded">
+            <div v-if="editing">
+              <div>
+                <span>{donor}</span>, <span>{gift}</span>, and <span>{message}</span> represent
+                the values that will change on each card.
+              </div>
+              <textarea class="message" v-model="message"></textarea>
+            </div>
+            <div class="formatted-message" v-else v-html="formattedMessage"></div>
+          </div>
+        </div>
+        <div class="box gifts-box">
+          <div class="box-header">
+            Gifts
             <icon-button @click="goToAdd"><add-icon/></icon-button>
           </div>
-        </div>
-        <div class="box-body padded" v-if="listEmpty">
-          No gifts recorded. Click the plus icon to get started.
-        </div>
-        <div v-else>
-          <card
-            v-for="card in cards"
-            :key="card.id"
-            :donor="card.donor"
-            :gift="card.gift"
-            :selected="selected(card.id)"
-            @change="cardSelected(card.id, $event)"
-          ></card>
+          <div class="box-body padded" v-if="listEmpty">
+            No gifts recorded. Click the plus icon to get started.
+          </div>
+          <div v-else>
+            <card
+              v-for="card in cards"
+              :key="card.id"
+              :donor="card.donor"
+              :gift="card.gift"
+              :selected="selected(card.id)"
+              @change="cardSelected(card.id, $event)"
+            ></card>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="box instructions-box">
-      <div class="box-header">Instructions</div>
-      <div class="box-body padded">
-        <ol>
-          <li>Customize your message.<br>(This will print on all your cards.)</li>
-          <li>Record your gifts.</li>
-          <li>Click the print icon when ready!</li>
-        </ol>
+      <div class="box instructions-box">
+        <div class="box-header padded">Instructions</div>
+        <div class="box-body">
+          <ol>
+            <li>Customize your message</li>
+            <li>Record your gifts</li>
+            <li>Click the print icon when ready!</li>
+          </ol>
+        </div>
       </div>
+      <fab @click="printCards"><print-icon/></fab>
     </div>
-    <fab @click="printCards"><print-icon/></fab>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { Card, Fab } from '~/components';
-import { AddIcon, IconButton, PrintIcon } from '~/components/icons';
+import { Card, Fab, FlatButton } from '~/components';
+import { AddIcon, EditIcon, IconButton, PrintIcon, DoneIcon, ThankyIcon } from '~/components/icons';
 
 // See https://apracticalwedding.com/wedding-thank-you-card-wording-template/
 const message =
@@ -72,7 +84,17 @@ function highlight(text) {
 
 export default {
   name: 'Dashboard',
-  components: { Card, AddIcon, IconButton, PrintIcon, Fab },
+  components: {
+    Card,
+    AddIcon,
+    IconButton,
+    PrintIcon,
+    Fab,
+    EditIcon,
+    DoneIcon,
+    FlatButton,
+    ThankyIcon,
+  },
   created() {
     this.$store.dispatch('getCards');
   },
@@ -112,13 +134,38 @@ export default {
     printCards() {
       alert(`This function isn't ready quite yet. Try back tomorrow.`);
     },
+    logout() {
+      alert('logging out');
+    },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.dashboard {
+.toolbar {
+  display: flex;
+  background-color: var(--primary-color);
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  padding: 16px;
+  padding-left: 24px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 5px #9e9e9e;
+  color: #ffffff;
+  user-select: none;
+}
+.toolbar-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.toolbar-title {
+  padding-left: 24px;
+  font-size: 18px;
+}
+.page {
   margin: 16px auto;
   display: flex;
   max-width: 992px;
@@ -132,6 +179,10 @@ export default {
   background-color: #f5f5f5;
   padding: var(--padding-default);
   border-bottom: var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 8px 9px 16px;
 }
 .box-body {
   display: flex;
@@ -151,17 +202,10 @@ export default {
   border: var(--border-light);
   border-radius: var(--round-small);
   background-color: #f5f5f5;
-  margin: 16px 0px;
+  margin-top: 16px;
 }
 .formatted-message {
   margin-bottom: 16px;
-  height: 232px;
-}
-.gifts-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 13px 16px;
 }
 .edit-button {
   align-self: flex-end;
@@ -186,5 +230,11 @@ export default {
 }
 .icon {
   color: rgba(0, 0, 0, 0.54);
+}
+span {
+  color: var(--primary-color);
+}
+li {
+  padding: 16px 0px;
 }
 </style>

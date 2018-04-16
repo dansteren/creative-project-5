@@ -29,6 +29,7 @@ export default {
   align-items: center;
   box-shadow: 0px 3px 9px #9e9e9e;
   transition: background 0.45s;
+  cursor: pointer;
 }
 .fab:hover {
   background-color: #7bcfaa;
