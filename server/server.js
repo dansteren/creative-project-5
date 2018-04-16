@@ -42,6 +42,15 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+
+const DEFAULT_MESSAGE = 'Dear {donor},\n\n' +
+'Thank you for coming to our wedding! It truly would not have been the same ' +
+'without all of our family and friends there. We were so happy to receive ' +
+'the {gift} and we look forward to using it for years to come.\n\n' +
+'With gratitude,\n\n' +
+'Joshua & Samantha\n\n' +
+'P.S. {message}\n';
+
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
@@ -282,7 +291,8 @@ app.post('/api/users', (req, res) => {
       return knex('users').insert({
         username: req.body.username,
         hash: hash,
-        name: req.body.name
+        name: req.body.name,
+        defaultmessage: DEFAULT_MESSAGE
       });
     })
     .then(ids => {
