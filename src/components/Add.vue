@@ -50,7 +50,6 @@ export default {
           donor: this.donor,
           gift: this.gift,
           message: this.message,
-          user: this.$store.state.user
         });
         (this.donor = ''), (this.gift = ''), (this.message = ''), (this.error = '');
         this.$refs.donor.focus();

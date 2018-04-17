@@ -68,7 +68,7 @@ app.post('/api/cards', verifyToken, (req, res) => {
   console.log('add card');
 
   //Make sure all of the information comes in the body
-  if (!req.body.gift || !req.body.user.id || !req.body.donor)
+  if (!req.body.gift || !req.body.donor)
     return res.status(400).send();
 
   let message;
@@ -80,7 +80,7 @@ app.post('/api/cards', verifyToken, (req, res) => {
   knex('gifts')
     .insert({
       item: req.body.gift,
-      user_id: req.body.user.id,
+      user_id: req.userID,
       donor: req.body.donor,
       psmessage: message
     })

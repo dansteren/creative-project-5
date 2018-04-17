@@ -123,11 +123,10 @@ export default new Vuex.Store({
         console.log('getCards failed:', error);
       }
     },
-    async addCard({ dispatch }, cardAndUser) {
+    async addCard({ dispatch }, card) {
       return new Promise(async (resolve, reject) => {
         try {
-          console.log(cardAndUser);
-          const response = await axios.post(`/api/cards`, cardAndUser, getAuthHeader());
+           const response = await axios.post(`/api/cards`, card, getAuthHeader());
           dispatch('getCards');
           resolve();
         } catch (error) {
