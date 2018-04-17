@@ -11,6 +11,7 @@ const getAuthHeader = () => {
 export default new Vuex.Store({
   state: {
     user: {},
+    message: '',
     token: '',
     authError: '',
     cards: [],
@@ -27,6 +28,9 @@ export default new Vuex.Store({
   mutations: {
     setUser(state, user) {
       state.user = user;
+    },
+    setMessage(state, message) {
+      state.message = message;
     },
     setToken(state, token) {
       state.token = token;
@@ -50,17 +54,23 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    async initialize(context) {
+    async initialize({ commit }) {
       let token = localStorage.getItem('token');
       if (token) {
         try {
           const response = await axios.get('/api/me', getAuthHeader());
-          context.commit('setToken', token);
-          context.commit('setUser', response.data.user);
+          commit('setToken', token);
+          commit('setUser', response.data.user);
         } catch (error) {
           localStorage.removeItem('token');
-          context.commit('setUser', {});
-          context.commit('setToken', '');
+          commit('setUser', {});
+          commit('setToken', '');
+        }
+        try {
+          const messageResponse = await axios.get('/api/message', getAuthHeader());
+          commit('setMessage', messageResponse.data.message);
+        } catch (error) {
+          console.log('Error getting message. Sucks to suck.');
         }
       }
     },
@@ -87,6 +97,7 @@ export default new Vuex.Store({
         const response = await axios.post('/api/login', user);
         commit('setUser', response.data.user);
         commit('setToken', response.data.token);
+        commit('setMessage', response.data.message);
         commit('setAuthError', '');
       } catch (error) {
         commit('setAuthError', '');
@@ -120,6 +131,25 @@ export default new Vuex.Store({
           resolve();
         } catch (error) {
           console.log('addCard failed:', error);
+          reject(error);
+        }
+      });
+    },
+    async getMessage({ dispatch }) {
+      try {
+        const response = await axios.get(`/api/message`);
+      } catch (error) {
+        console.log('getMessage failed:', error);
+      }
+    },
+    async updateMessage({ commit }, message) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const response = await axios.put(`/api/message`, message);
+          commit('setMessage', message);
+          resolve();
+        } catch (error) {
+          console.log('updateMessage failed:', error);
           reject(error);
         }
       });

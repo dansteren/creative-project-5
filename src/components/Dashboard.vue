@@ -6,9 +6,11 @@
         <div class="box message-box">
           <div class="box-header">
             Message
-            <icon-button @click="toggleEditing">
-              <done-icon v-if="editing"/>
-              <edit-icon v-else/>
+            <icon-button v-if="editing" @click="finishEditing">
+              <done-icon />
+            </icon-button>
+            <icon-button v-else @click="startEditing">
+              <edit-icon/>
             </icon-button>
           </div>
           <div class="box-body padded">
@@ -90,6 +92,7 @@ export default {
   },
   created() {
     this.$store.dispatch('getCards');
+    this.message = this.$store.state.message;
   },
   data() {
     return {
@@ -102,6 +105,9 @@ export default {
       return this.cards.length === 0;
     },
     formattedMessage() {
+      if (!this.message) {
+        return '';
+      }
       return this.message
         .replace(/{donor}/g, highlight('donor'))
         .replace(/{gift}/g, highlight('gift'))
@@ -117,8 +123,16 @@ export default {
     cardSelected(id, event) {
       this.$store.commit(event.srcElement.checked ? 'addSelection' : 'removeSelection', id);
     },
-    toggleEditing() {
-      this.editing = !this.editing;
+    startEditing() {
+      this.editing = true;
+    },
+    async finishEditing() {
+      try {
+        // await this.$store.dispatch('updateMessage', this.message);
+        this.editing = false;
+      } catch (error) {
+        alert("Your message wasn't saved to the server. Try again.");
+      }
     },
     goToAdd() {
       this.$router.push('/add');

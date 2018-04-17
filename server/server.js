@@ -42,14 +42,14 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-
-const DEFAULT_MESSAGE = 'Dear {donor},\n\n' +
-'Thank you for coming to our wedding! It truly would not have been the same ' +
-'without all of our family and friends there. We were so happy to receive ' +
-'the {gift} and we look forward to using it for years to come.\n\n' +
-'With gratitude,\n\n' +
-'Joshua & Samantha\n\n' +
-'P.S. {message}\n';
+const DEFAULT_MESSAGE =
+  'Dear {donor},\n\n' +
+  'Thank you for coming to our wedding! It truly would not have been the same ' +
+  'without all of our family and friends there. We were so happy to receive ' +
+  'the {gift} and we look forward to using it for years to come.\n\n' +
+  'With gratitude,\n\n' +
+  'Joshua & Samantha\n\n' +
+  'P.S. {message}\n';
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -196,37 +196,40 @@ app.put('/api/message', verifyToken, (req, res) => {
   console.log('edit default message');
 
   knex('users')
-  .where('id', req.userID)
-  .update({
-    defaultmessage: req.body.defaultmessage
-  }).then(ids => {
-    return knex('users')
     .where('id', req.userID)
-    .first()
-    .select('defaultmessage');
-  }).then(message => {
-    res.status(200).send(message);
-    return;
-  }).catch(error => {
-    console.log("Could not edit default message");
-    res.status(500).json({error});
-  });
+    .update({
+      defaultmessage: req.body.defaultmessage
+    })
+    .then(ids => {
+      return knex('users')
+        .where('id', req.userID)
+        .first()
+        .select('defaultmessage');
+    })
+    .then(message => {
+      res.status(200).send(message);
+      return;
+    })
+    .catch(error => {
+      console.log('Could not edit default message');
+      res.status(500).json({ error });
+    });
 });
 
 //Get default message for user id
 app.get('/api/message', verifyToken, (req, res) => {
   console.log('get default message for user');
 
-
   knex('users')
-  .select('defaultmessage')
-  .where('id', req.userID)
-  .then(message => {
-    res.status(200).json(message);
-    return;
-  }).catch(error => {
-    console.log("could not get default message ");
-  });
+    .select('defaultmessage')
+    .where('id', req.userID)
+    .then(message => {
+      res.status(200).json(message);
+      return;
+    })
+    .catch(error => {
+      console.log('could not get default message ');
+    });
 });
 
 //AUTHENTICATION******************
@@ -251,7 +254,12 @@ app.post('/api/login', (req, res) => {
           expiresIn: 86400 // expires in 24 hours
         });
         res.status(200).json({
-          user: { username: user.username, name: user.name, id: user.id },
+          user: {
+            username: user.username,
+            name: user.name,
+            id: user.id
+          },
+          message: user.defaultmessage,
           token: token
         });
       } else {
