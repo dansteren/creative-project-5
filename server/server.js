@@ -68,13 +68,11 @@ app.post('/api/cards', verifyToken, (req, res) => {
   console.log('add card');
 
   //Make sure all of the information comes in the body
-  if (!req.body.gift || !req.body.donor)
-    return res.status(400).send();
+  if (!req.body.gift || !req.body.donor) return res.status(400).send();
 
   let message;
   if (!req.body.message) message = '';
   else message = req.body.message;
-
 
   //query to add card
   knex('gifts')
@@ -222,10 +220,11 @@ app.get('/api/message', verifyToken, (req, res) => {
   console.log('get default message for user');
 
   knex('users')
-    .select('defaultmessage')
+    .select('defaultmessage as message')
     .where('id', req.userID)
-    .then(messages => {
-      res.status(200).json({ message: messages[0].defaultmessage });
+    .first()
+    .then(message => {
+      res.status(200).json(message);
       return;
     })
     .catch(error => {
