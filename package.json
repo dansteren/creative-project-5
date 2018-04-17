@@ -11,9 +11,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "jsonwebtoken": "^8.2.1",
-    "knex": "^0.14.5",
-    "mariasql": "^0.2.6",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
@@ -59,11 +56,7 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"],
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
