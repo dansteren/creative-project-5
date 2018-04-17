@@ -126,7 +126,7 @@ export default new Vuex.Store({
     async addCard({ dispatch }, card) {
       return new Promise(async (resolve, reject) => {
         try {
-           const response = await axios.post(`/api/cards`, card, getAuthHeader());
+          const response = await axios.post(`/api/cards`, card, getAuthHeader());
           dispatch('getCards');
           resolve();
         } catch (error) {
@@ -160,15 +160,15 @@ export default new Vuex.Store({
     },
     async updateCard({ dispatch }, card) {
       try {
-        const response = await axios.put(`/api/cards/${card.id}`, card);
+        const response = await axios.put(`/api/cards/${card.id}`, card, getAuthHeader());
         dispatch('getCards');
       } catch (error) {
         console.log('updateCard failed:', error);
       }
     },
-    async deleteCard({ dispatch }, card) {
+    async deleteCard({ dispatch }, cardId) {
       try {
-        const response = await axios.delete(`/api/cards/${card.id}`);
+        const response = await axios.delete(`/api/cards/${cardId}`, getAuthHeader());
         dispatch('getCards');
       } catch (error) {
         console.log('deleteCard failed:', error);

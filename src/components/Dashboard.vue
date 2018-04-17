@@ -37,9 +37,10 @@
               v-for="card in cards"
               :key="card.id"
               :donor="card.donor"
+              :psmessage="card.psmessage"
               :gift="card.gift"
-              :selected="selected(card.id)"
-              @change="cardSelected(card.id, $event)"
+              @edit="showEditCardThing(card)"
+              @delete="deleteCard(card.id)"
             ></card>
           </div>
         </div>
@@ -120,8 +121,12 @@ export default {
     selected(cardId) {
       return this.$store.getters.selected(cardId);
     },
-    cardSelected(id, event) {
-      this.$store.commit(event.srcElement.checked ? 'addSelection' : 'removeSelection', id);
+    showEditCardThing(card) {
+      console.log('editing...');
+    },
+    deleteCard(cardId) {
+      console.log('deleting...');
+      this.$store.dispatch('deleteCard', cardId);
     },
     startEditing() {
       this.editing = true;

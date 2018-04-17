@@ -1,8 +1,10 @@
 <template>
   <div class="card">
-    <input type="checkbox" :checked="selected" @change="emit">
     <div class="donor-box">{{this.donor}}</div>
     <div class="item-box">{{this.gift}}</div>
+    <div class="message-box">{{this.psmessage || 'NA'}}</div>
+    <div class="delete" @click="emitEdit">Edit</div>
+    <div class="delete" @click="emitDelete">Delete</div>
   </div>
 </template>
 
@@ -18,17 +20,20 @@ export default {
       type: String,
       required: true,
     },
-    selected: {
-      type: Boolean,
-      required: true,
+    psmessage: {
+      type: String,
+      required: false,
     },
   },
   data() {
     return {};
   },
   methods: {
-    emit(event) {
-      this.$emit('change', event);
+    emitEdit(event) {
+      this.$emit('edit', event);
+    },
+    emitDelete(event) {
+      this.$emit('delete', event);
     },
   },
 };
@@ -51,5 +56,16 @@ export default {
   padding: 4px;
   border-left: 1px solid black;
   flex: 1;
+}
+.message-box {
+  padding: 4px;
+  border-left: 1px solid black;
+  flex: 1;
+}
+.delete {
+  display: none;
+}
+.card:hover .delete {
+  display: block;
 }
 </style>
