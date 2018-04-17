@@ -68,18 +68,19 @@ app.post('/api/cards', verifyToken, (req, res) => {
   console.log('add card');
 
   //Make sure all of the information comes in the body
-  if (!req.body.item || !req.body.user_id || !req.body.donor)
+  if (!req.body.gift || !req.body.user.id || !req.body.donor)
     return res.status(400).send();
 
   let message;
-  if (!req.body.psmessage) message = '';
-  else message = req.body.psmessage;
+  if (!req.body.message) message = '';
+  else message = req.body.message;
+
 
   //query to add card
   knex('gifts')
     .insert({
-      item: req.body.item,
-      user_id: req.body.user_id,
+      item: req.body.gift,
+      user_id: req.body.user.id,
       donor: req.body.donor,
       psmessage: message
     })
@@ -157,7 +158,7 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
   console.log('edit card');
 
   //Make sure all of the information comes in the body
-  if (!req.body.item || !req.body.user_id || !req.body.donor)
+  if (!req.body.gift || !req.body.user.id || !req.body.donor)
     return res.status(400).send();
 
   let message;
@@ -167,8 +168,8 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
   knex('gifts')
     .where('id', req.params.id)
     .update({
-      item: req.body.item,
-      user_id: req.body.user_id,
+      item: req.body.gift,
+      user_id: req.body.user.id,
       donor: req.body.donor,
       psmessage: message
     })
@@ -198,7 +199,7 @@ app.put('/api/message', verifyToken, (req, res) => {
   knex('users')
     .where('id', req.userID)
     .update({
-      defaultmessage: req.body.defaultmessage
+      defaultmessage: req.body.message
     })
     .then(ids => {
       return knex('users')
