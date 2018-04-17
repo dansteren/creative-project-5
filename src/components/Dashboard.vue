@@ -90,13 +90,13 @@ export default {
     DoneIcon,
     Toolbar,
   },
-  created() {
+  async mounted() {
     this.$store.dispatch('getCards');
+    await this.$store.dispatch('getMessage');
     this.message = this.$store.state.message;
   },
   data() {
     return {
-      message,
       editing: false,
     };
   },
@@ -105,10 +105,10 @@ export default {
       return this.cards.length === 0;
     },
     formattedMessage() {
-      if (!this.message) {
+      if (!this.$store.state.message) {
         return '';
       }
-      return this.message
+      return this.$store.state.message
         .replace(/{donor}/g, highlight('donor'))
         .replace(/{gift}/g, highlight('gift'))
         .replace(/{message}/g, highlight('message'))
@@ -128,7 +128,7 @@ export default {
     },
     async finishEditing() {
       try {
-        // await this.$store.dispatch('updateMessage', this.message);
+        await this.$store.dispatch('updateMessage', this.message);
         this.editing = false;
       } catch (error) {
         alert("Your message wasn't saved to the server. Try again.");

@@ -223,8 +223,8 @@ app.get('/api/message', verifyToken, (req, res) => {
   knex('users')
     .select('defaultmessage')
     .where('id', req.userID)
-    .then(message => {
-      res.status(200).json(message);
+    .then(messages => {
+      res.status(200).json({ message: messages[0].defaultmessage });
       return;
     })
     .catch(error => {

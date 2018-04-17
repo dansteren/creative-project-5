@@ -136,16 +136,24 @@ export default new Vuex.Store({
       });
     },
     async getMessage({ dispatch }) {
-      try {
-        const response = await axios.get(`/api/message`);
-      } catch (error) {
-        console.log('getMessage failed:', error);
-      }
+      return new Promise(async (resolve, reject) => {
+        try {
+          const response = await axios.get(`/api/message`, getAuthHeader());
+          resolve();
+        } catch (error) {
+          console.log('getMessage failed:', error);
+          reject();
+        }
+      });
     },
     async updateMessage({ commit }, message) {
       return new Promise(async (resolve, reject) => {
         try {
-          const response = await axios.put(`/api/message`, message);
+          const response = await axios.put(
+            `/api/message`,
+            { defaultmessage: message },
+            getAuthHeader()
+          );
           commit('setMessage', message);
           resolve();
         } catch (error) {
