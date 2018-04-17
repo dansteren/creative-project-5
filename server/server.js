@@ -199,7 +199,7 @@ app.put('/api/message', verifyToken, (req, res) => {
   knex('users')
     .where('id', req.userID)
     .update({
-      defaultmessage: req.body.defaultmessage
+      defaultmessage: req.body.message
     })
     .then(ids => {
       return knex('users')
