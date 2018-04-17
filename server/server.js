@@ -77,7 +77,7 @@ app.post('/api/cards', verifyToken, (req, res) => {
   //query to add card
   knex('gifts')
     .insert({
-      item: req.body.gift,
+      gift: req.body.gift,
       user_id: req.userID,
       donor: req.body.donor,
       psmessage: message
@@ -166,7 +166,7 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
   knex('gifts')
     .where('id', req.params.id)
     .update({
-      item: req.body.gift,
+      gift: req.body.gift,
       user_id: req.body.user.id,
       donor: req.body.donor,
       psmessage: message
