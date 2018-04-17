@@ -31,11 +31,13 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mariasql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password'
+      host: '127.0.0.1',
+      user: 'root',
+      password: process.env.DB_PASSWORD || '',
+      db: 'thankyous',
+      charset: 'utf8'
     },
     pool: {
       min: 2,
