@@ -150,11 +150,7 @@ export default new Vuex.Store({
     async updateMessage({ commit }, message) {
       return new Promise(async (resolve, reject) => {
         try {
-          const response = await axios.put(
-            `/api/message`,
-            { defaultmessage: message },
-            getAuthHeader()
-          );
+          const response = await axios.put(`/api/message`, { message: message }, getAuthHeader());
           commit('setMessage', message);
           resolve();
         } catch (error) {
