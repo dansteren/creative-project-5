@@ -306,7 +306,7 @@ app.post('/api/users', (req, res) => {
       return knex('users')
         .where('id', ids[0])
         .first()
-        .select('username', 'name', 'id');
+        .select();
     })
     .then(user => {
       let token = jwt.sign({ id: user.id }, jwtSecret, {

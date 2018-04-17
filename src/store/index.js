@@ -79,6 +79,8 @@ export default new Vuex.Store({
         const response = await axios.post('/api/users', user);
         commit('setUser', response.data.user);
         commit('setToken', response.data.token);
+        console.log(response.data.user.defaultmessage);
+        commit('setMessage', response.data.user.defaultmessage);
         commit('setAuthError', '');
       } catch (error) {
         commit('setToken', '');
