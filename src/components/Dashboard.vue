@@ -39,7 +39,7 @@
               :donor="card.donor"
               :psmessage="card.psmessage"
               :gift="card.gift"
-              @edit="showEditCardThing(card)"
+              @edit="goToEdit(card)"
               @delete="deleteCard(card.id)"
             ></card>
           </div>
@@ -121,8 +121,11 @@ export default {
     selected(cardId) {
       return this.$store.getters.selected(cardId);
     },
-    showEditCardThing(card) {
-      console.log('editing...');
+    goToEdit(card) {
+      this.$router.push({
+        name: 'Edit',
+        params: { card: card },
+      });
     },
     deleteCard(cardId) {
       console.log('deleting...');

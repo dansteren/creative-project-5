@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import store from '~/store';
-import { Add, Root, Print } from '~/components';
+import { Add, Root, Edit } from '~/components';
 
 Vue.use(Router);
 
@@ -26,9 +26,10 @@ export default new Router({
       component: Root,
     },
     {
-      path: '/print',
-      name: 'Print',
-      component: Print,
+      path: '/edit',
+      name: 'Edit',
+      component: Edit,
+      props: true,
     },
   ],
 });

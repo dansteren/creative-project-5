@@ -156,8 +156,7 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
   console.log('edit card');
 
   //Make sure all of the information comes in the body
-  if (!req.body.gift || !req.body.user.id || !req.body.donor)
-    return res.status(400).send();
+  if (!req.body.gift || !req.body.donor) return res.status(400).send();
 
   let message;
   if (!req.body.psmessage) message = '';
@@ -167,7 +166,7 @@ app.put('/api/cards/:id', verifyToken, (req, res) => {
     .where('id', req.params.id)
     .update({
       gift: req.body.gift,
-      user_id: req.body.user.id,
+      user_id: req.userID,
       donor: req.body.donor,
       psmessage: message
     })
