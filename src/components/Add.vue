@@ -19,6 +19,7 @@
 
 <script>
 import { Toolbar } from '~/components';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Add',
@@ -45,10 +46,11 @@ export default {
         return (this.error = 'Gift field must not be empty');
       }
       try {
-        await this.$store.dispatch('addCard', {
+         await this.$store.dispatch('addCard', {
           donor: this.donor,
           gift: this.gift,
           message: this.message,
+          user: this.$store.state.user
         });
         (this.donor = ''), (this.gift = ''), (this.message = ''), (this.error = '');
         this.$refs.donor.focus();
