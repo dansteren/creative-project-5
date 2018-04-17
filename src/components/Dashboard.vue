@@ -90,7 +90,7 @@ export default {
     DoneIcon,
     Toolbar,
   },
-  async mounted() {
+  async beforeMount() {
     this.$store.dispatch('getCards');
     await this.$store.dispatch('getMessage');
     this.message = this.$store.state.message;
