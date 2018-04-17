@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <router-view/>
+    <a class="footer" href="https://github.com/dansteren/creative-project-5">
+      <img src="/static/github.svg" alt="GitHub Repo">
+    </a>
   </div>
 </template>
 
@@ -29,5 +32,23 @@ body {
   color: #2c3e50;
   margin: 0px;
   padding: 0px;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #212121;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #eceff1;
+  font-size: 12px;
+}
+.footer img {
+  width: 24px;
+  height: 24px;
+  margin: 8px;
 }
 </style>

@@ -18,7 +18,7 @@ export default {
 <style scoped>
 .fab {
   position: fixed;
-  bottom: 32px;
+  bottom: 72px;
   right: 32px;
   width: 56px;
   height: 56px;
