@@ -64,16 +64,7 @@
 import { mapState } from 'vuex';
 import { Card, Fab, Toolbar } from '~/components';
 import { AddIcon, EditIcon, IconButton, PrintIcon, DoneIcon, ThankyIcon } from '~/components/icons';
-
-// See https://apracticalwedding.com/wedding-thank-you-card-wording-template/
-const message =
-  'Dear {donor},\n\n' +
-  'Thank you for coming to our wedding! It truly would not have been the same ' +
-  'without all of our family and friends there. We were so happy to receive ' +
-  'the {gift} and we look forward to using it for years to come.\n\n' +
-  'With gratitude,\n\n' +
-  'Joshua & Samantha\n\n' +
-  'P.S. {message}\n';
+import { download, toPDF } from '~/utils';
 
 function highlight(text) {
   return `<span style="color: var(--primary-color)">${text}</span>`;
@@ -145,8 +136,13 @@ export default {
     goToAdd() {
       this.$router.push('/add');
     },
-    printCards() {
-      alert(`This function isn't ready quite yet. Try back tomorrow.`);
+    async printCards() {
+      if (!this.cards || this.cards.length === 0) {
+        alert('No gifts recorded. Record a gift before proceeding.');
+        return;
+      }
+      const pdfBlob = await toPDF(this.cards, this.message);
+      download(pdfBlob, 'cards.pdf');
     },
   },
 };
