@@ -67,5 +67,10 @@ export default {
 }
 .card:hover .delete {
   display: block;
+  padding: 0px 10px;
+  margin: 0px 3px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
 }
 </style>
