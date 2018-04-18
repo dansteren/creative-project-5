@@ -133,11 +133,12 @@ app.delete('/api/cards/:id', verifyToken, (req, res) => {
 });
 
 //Get all cards
-app.get('/api/cards', (req, res) => {
+app.get('/api/cards', verifyToken, (req, res) => {
   console.log('get all cards');
 
   knex('gifts')
     .select()
+    .where('user_id', req.userID)
     .then(cards => {
       res.status(200).json({ cards });
     })
